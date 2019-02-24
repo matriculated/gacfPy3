@@ -1,0 +1,43 @@
+{{extend 'layout.html'}}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{=URL(c='default', f='index')}}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{=URL(c='database', f='index')}}">Databases</a></li>
+        <li class="breadcrumb-item"><a href="{{=URL(c='table', f='index', vars = dict(dbname= dbname))}}">{{=dbname}}</a></li>
+        <li class="breadcrumb-item"><a href="{{=URL(c='record', f='index', vars = dict(dbname= dbname, tablename= tablename))}}">{{=tablename}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{=recordid}}</li>
+    </ol>
+</nav>
+<div class="row">
+	<div class="col-lg-6">
+		<form method="POST" enctype="multipart/form-data">
+			<input type="hidden" name="_formname" value="default" />
+			<input type="hidden" name="_formkey" value="{{=form.formkey}}" />
+			{{for k,v in record.iteritems():}}
+				<div class="form-group">
+					<label for="{{=k}}">{{=k}}</label>
+					{{if type(v) == str and len(v) > 100:}}
+						<textarea name="{{=k}}" class="form-control" id="{{=k}}" aria-label="With textarea">{{=v}}</textarea>
+					{{else:}}
+						{{if k in fkeys.keys():}}
+							<div class="input-group">
+								<input type="text" class="form-control" id="{{=k}}" value="{{=v}}" placeholder="{{=k}}" aria-label="{{=k}}" aria-describedby="basic-addon2" readonly>
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button">Lookup</button>
+									<a href="{{=URL(c = 'record', f = 'add', vars = dict(dbname = dbname, tablename = fkeys[k]['Referenced Name']))}}" target="_blank">
+										<button class="btn btn-outline-secondary" type="button">New</button>
+									</a>
+								</div>
+							</div>
+						{{else:}}
+							<input name="{{=k}}" type="text" class="form-control" id="{{=k}}" aria-describedby="" placeholder="" value="{{=v}}" {{=k == pkey['name'] and 'readonly' or ''}}/>
+						{{pass}}
+					{{pass}}
+					<small id="emailHelp" class="form-text text-muted" style="display:none;">We'll never share your email with anyone else.</small>
+				</div>
+			{{pass}}
+			<input type="submit" name="submit" value="Update" />
+		</form>
+	</div>
+	<div class="col-lg-6"></div>
+</div>

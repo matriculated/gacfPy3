@@ -1,0 +1,39 @@
+{{extend 'layout.html'}}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{=URL(c='default', f='index')}}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{=URL(f='index')}}">Databases</a></li>
+        <li class="breadcrumb-item"><a href="{{=URL(c='table', f='index', vars = dict(dbname= dbname))}}">{{=dbname}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{=tablename}}</li>
+    </ol>
+</nav>
+<h3>{{=tablename}}</h3>
+{{if len(results)>0:}}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            {{cells = results[0].keys()}}
+            <th><a href="{{=URL(c = 'record', f = 'add', vars = request.get_vars.copy())}}">Add</a></th>
+            {{for cell in cells:}}
+             <th scope="col">{{=cell}}</th>
+            {{pass}}
+        </tr>
+        </thead>
+        <tbody>
+            {{for result in results:}}
+                <tr>
+                    {{vars = request.get_vars.copy()}}
+                    {{vars['recordid'] = result[pkey]}}
+                    <td>
+                        <a href="{{=URL(c = 'record', f = 'edit', vars = vars)}}">Edit</a>
+                    </td>
+                    {{for cell in cells:}}
+                        <td>{{=result[cell]}}</td>
+                    {{pass}}
+                </tr>
+            {{pass}}
+        </tbody>
+    </table>
+{{else:}}
+    <p>No records available.</p>
+{{pass}}

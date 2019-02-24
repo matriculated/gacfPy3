@@ -1,0 +1,9 @@
+# -*- coding: utf-8 -*-
+
+def index():
+    keys = []
+    for k,v in DBREG.items():
+        if not isinstance(v, Exception):
+            keys.append(k)
+    return dict(databaseNames = keys)
+#END def index

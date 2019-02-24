@@ -1,0 +1,109 @@
+{{extend 'layout.html'}}
+<style>
+	li{list-style-type:none;}
+</style>
+<script type="text/javascript">
+	var searchDelayTimer = null;
+	function search(){
+		var form = jQuery('#SearchForm');
+		var action = jQuery(form).attr('action');
+		var key = jQuery('#SearchForm>input[name=\'_formkey\']').val();
+		var searchTerms = jQuery('#SearchTerms').val();
+		jQuery.ajax({
+			url: action,
+			method: 'POST',
+			data: {
+				"SearchTerms": searchTerms,
+				"_formname": "search",
+				"_formkey": key
+			}
+		}).done(function(data){
+			let formkey = jQuery(data.form).find('input[name=\'_formkey\']').attr('value');
+			jQuery('#SearchForm>input[name=\'_formkey\']').val(formkey);
+			jQuery('#SearchResults').empty();
+			for (var property in data.record){
+				jQuery('#SearchResults').append('<label style="font-weight:bold;" for="'+property+'">'+property+'</label>')
+				jQuery('#SearchResults').append(jQuery('<div/>').text(data.record[property]));
+			}
+		});
+	}
+	jQuery(document).ready(function(){
+		jQuery('button[data-columnname]').click(function(e){
+			clearTimeout(searchDelayTimer);
+			jQuery('#SearchForm').hide();
+			jQuery('#SearchResults').empty();
+			jQuery('#SearchTerms').val('');
+			let reftablename = jQuery(this).attr('data-reftablename');
+			jQuery.ajax({				
+				url: "{{=URL(f = 'search.json')}}",
+				method: "GET",
+				data: {"dbname":"{{=dbname}}","tablename":reftablename}
+			}).done(function(data){
+				let formkey = jQuery(data.form).find('input[name=\'_formkey\']').attr('value');
+				let formaction = jQuery(data.form).attr('action');
+				jQuery('#SearchForm>input[name=\'_formkey\']').val(formkey);
+				jQuery('#SearchForm').attr('action',formaction);
+				jQuery('#SearchForm').show();
+			});
+		});
+		jQuery('#SearchForm').submit(function(e){
+			e.preventDefault();
+			search();
+		});
+		jQuery('#SearchTerms').keyup(function(e){
+			clearTimeout(searchDelayTimer);
+		});
+	});
+</script>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+	   <li class="breadcrumb-item"><a href="{{=URL(c='default', f='index')}}">Home</a></li>
+	   <li class="breadcrumb-item"><a href="{{=URL(c='database', f='index')}}">Databases</a></li>
+	   <li class="breadcrumb-item"><a href="{{=URL(c='database', f='view', vars = dict(dbname= dbname))}}">{{=dbname}}</a></li>
+	   <li class="breadcrumb-item"><a href="{{=URL(c='record', f='index', vars = dict(dbname= dbname, tablename= tablename))}}">{{=tablename}}</a></li>
+	   <li class="breadcrumb-item active" aria-current="page">Add entry to {{=tablename}}</li>
+    </ol>
+</nav>
+<div class="row">
+	<div class="col-lg-6">
+		<form>
+			<input type="hidden" name="_formname" value="default" />
+			<input type="hidden" name="_formkey" value="{{=form.formkey}}" />
+			{{for column in columns:}}
+				{{column = column['name']}}
+				<div class="form-group">
+					<label for="{{=column}}">{{=column}}</label>
+					{{if column in fkeys.keys():}}
+						<div class="input-group">
+							<input type="text" class="form-control" id="{{=column}}" placeholder="{{=column}}" aria-label="{{=column}}" aria-describedby="basic-addon2" readonly>
+							<div class="input-group-append">
+								<button class="btn btn-outline-secondary" type="button" data-columnname="{{=column}}" data-reftablename="{{=fkeys[column]['Referenced Name']}}">Lookup</button>
+								<a href="{{=URL(c = 'record', f = 'add', vars = dict(dbname = dbname, tablename = fkeys[column]['Referenced Name']))}}" target="_blank">
+									<button class="btn btn-outline-secondary" type="button">New</button>
+								</a>
+							</div>
+						</div>
+					{{else:}}
+						<input type="text" class="form-control" id="{{=column}}" aria-describedby="" placeholder="{{=column}}" value="" {{=column == pkey['name'] and 'readonly' or ''}}/>
+					{{pass}}
+					<small id="emailHelp" class="form-text text-muted" style="display:none;">We'll never share your email with anyone else.</small>
+				</div>
+			{{pass}}
+			<input type="submit" name="submit" value="Add" />
+		</form>
+	</div>
+	<div class="col-lg-6">
+		<form id="SearchForm" style="display:none;">
+			<input type="hidden" name="_formname" value="search" />
+			<input type="hidden" name="_formkey" value="" />
+			<div class="form-group">
+				<label for="SearchTerms">Search</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="SearchTerms" name="SearchTerms" placeholder="Search Terms" aria-label="Search Terms" aria-describedby="basic-addon2">
+				</div>
+			</div>
+		</form>
+		<div id="SearchResults">
+		</div>
+	</div>
+</div>

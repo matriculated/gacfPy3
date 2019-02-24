@@ -1,0 +1,25 @@
+{{extend 'layout.html'}}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">ISL Application Configuration</h1>
+        <p class="lead">.</p>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <h2>Features</h2>
+            <ul>
+                <li>View   <a href="{{=URL(c='database', f='index')}}">Available databases</a></li>
+                <li>Lookup <a href="{{=URL(c='database', f='index')}}">Submission Procedures</a></li>
+                <li>Download <a href="{{=URL(c='database', f='index')}}">CVS Templates</a></li>
+                <li>Upload  <a href="{{=URL(c='database', f='index')}}">CVS file upload</a></li>
+            </ul></div>
+        <div class="col-3">
+            <!--img src="{{=URL(c = 'static', f = 'images', args='db.png')}}"-->
+            <img src="{{=URL(c = 'static', f = 'images', args='gacf0.png')}}">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{=URL(c='default', f='index')}}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{=URL(c='database',f='index')}}">Databases</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{=dbname}}</li>
+    </ol>
+</nav>
+<h3>{{=dbname}}</h3>
+{{for result in results:}}
+    <div><a href="{{=URL(c='record',f='index1',vars=dict(dbname = dbname, tablename = result['name']))}}">{{=result['name']}}</a></div>
+{{pass}}

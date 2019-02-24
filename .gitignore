@@ -1,0 +1,4 @@
+applications/ApplicationConfig/progress.log
+applications/admin/sessions/*
+httpserver.log
+

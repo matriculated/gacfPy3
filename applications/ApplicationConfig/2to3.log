@@ -1,0 +1,87 @@
+--- ./controllers/appadmin.py	(original)
++++ ./controllers/appadmin.py	(refactored)
+@@ -76,7 +76,7 @@
+ 
+ def get_databases(request):
+     dbs = {}
+-    for (key, value) in global_env.items():
++    for (key, value) in list(global_env.items()):
+         try:
+             cond = isinstance(value, GQLDB)
+         except:
+--- ./controllers/database.py	(original)
++++ ./controllers/database.py	(refactored)
+@@ -2,7 +2,7 @@
+ 
+ def index():
+     keys = []
+-    for k,v in DBREG.items():
++    for k,v in list(DBREG.items()):
+         if not isinstance(v, Exception):
+             keys.append(k)
+     return dict(databaseNames = keys)
+--- ./controllers/record.py	(original)
++++ ./controllers/record.py	(refactored)
+@@ -6,7 +6,7 @@
+ 
+ def index():
+     dbname = request.get_vars.get('dbname',None)
+-    if not DBREG.has_key(dbname):
++    if dbname not in DBREG:
+         redirect(URL(c = 'database', f = 'index'))
+     database = DBREG[dbname]
+     table_name = request.get_vars.get('tablename',None)
+@@ -20,7 +20,7 @@
+ 
+ def edit():
+     dbname = request.get_vars.get('dbname', None)
+-    if not DBREG.has_key(dbname):
++    if dbname not in DBREG:
+         redirect(URL(c = 'database', f = 'index'))
+     database = DBREG[dbname]
+     table_name = request.get_vars.get('tablename',None)
+@@ -36,7 +36,7 @@
+     if form.accepts(request, session):
+         query = 'UPDATE ' + table_name + ' SET '
+         args = []
+-        for k,v in request.post_vars.iteritems():
++        for k,v in request.post_vars.items():
+             if k in ['submit', '_formkey', '_formname', pkey['name']]:
+                 continue
+             query += k + ' = ?, '
+@@ -58,7 +58,7 @@
+ 
+ def add():
+     dbname = request.get_vars.get('dbname', None)
+-    if not DBREG.has_key(dbname):
++    if dbname not in DBREG:
+         redirect(URL(c = 'database', f = 'index'))
+     database = DBREG[dbname]
+     table_name = request.get_vars.get('tablename',None)
+@@ -97,7 +97,7 @@
+             char=1
+     )
+     dbname = request.get_vars.get('dbname', None)
+-    if not DBREG.has_key(dbname):
++    if dbname not in DBREG:
+         raise HTTP(400, "Invalid dbname")
+     database = DBREG[dbname]
+     tablename = request.get_vars.get('tablename', None)
+@@ -148,7 +148,7 @@
+                         try:
+                             args.append('%'+casted_term+'%')
+                         except:
+-                            raise StandardError,(column,casted_term)
++                            raise Exception(column,casted_term)
+                         query += ' LIKE ?'
+                     else:
+                         args.append(casted_term)
+@@ -183,7 +183,7 @@
+ def get():
+     return dict()
+     dbname = request.get_vars.get('dbname', None)
+-    if not DBREG.has_key(dbname):
++    if dbname not in DBREG:
+         raise HTTP(400, "Invalid dbname")
+     database = DBREG[dbname]
+     tablename = request.get_vars.get('tablename', None)
