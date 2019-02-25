@@ -1,11 +1,33 @@
 # -*- coding: utf-8 -*-
 
+# # @auth.requires_login()
+import os.path 
+from pydal import DAL, Field
+
 def index():
-    # response.flash = T("Hello World")
-    # response.menu += [
-    #     (T('My Sites'), False, URL('admin', 'default', 'site'))
-    # ]
-    return dict()
+    x=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.bak'
+    outfile=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.out'
+
+    db=DAL('mssql4://BuildDbAdmin:Alt0ids76@localhost/master')
+    results=db.executesql('select * from sys.databases')
+    with open(outfile, 'w') as f:
+        for row in results:
+            # print row.name
+            # f.write("%s\n" % str(row.name))
+            # register('ApplicationConfiguration', 'mssql4://BuildDbAdmin:Alt0ids76@localhost/ApplicationConfiguration')
+            register(row.name, 'mssql4://BuildDbAdmin:Alt0ids76@localhost/' + row.name)
+
+    # return 'ZZZ \>' + x + str(os.path.isfile(x)) + '\\' + request.application + ' \< ZZZ'
+    return DBREG
+    # return dict()
+
+# import schemaUtilities
+# reload(schemaUtilities)
+# def index():
+#     # from schemaUtilities import schemaUtilities
+#     x = schemaUtilities.schemaUtilities.setUp()
+#     # a=schemaUtilities()
+#     # a.schemaUtilities.setup()
 
 @auth.requires_login()
 def api_get_user_email():

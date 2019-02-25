@@ -7,7 +7,7 @@
 
 response.menu = [
     (T('Databases'), False, URL('database', 'index'), []),
-    (T('Submission'), False, URL('database', 'index'), []),
+    (T('Submission'), False, URL('storedprocedures', 'index'), []),
     (T('Upload'), False, URL('database', 'index'), [])
 ]
 

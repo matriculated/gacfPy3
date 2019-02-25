@@ -2,6 +2,30 @@
 
 class schemaUtilities:
     @staticmethod
+    def setUp():
+        import os.path 
+    # x=os.getcwd()+'\..\models\database_registry.py.bak'
+    # x=os.getcwd()+'\models\database_registry.py.bak'
+        x=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.bak'
+        outfile=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.out'
+    # y=x + request.application
+    # return 'ZZZ \>' + y + str(os.path.isfile(y)) + '\\' + request.application + ' \< ZZZ'
+    #print(x)
+    #return [os.path.dirname(os.path.abspath(__file__)),  " <".join(os.getcwd()).join(">> "), os.path.isfile(os.getcwd().join('/../models/database_registry.py.bak'))]
+    # return [os.getcwd(), os.path.isfile(fname)]
+        from pydal import DAL, Field
+    # DAL()
+        db=DAL('mssql4://BuildDbAdmin:Alt0ids76@localhost/master')
+        results=db.executesql('select * from sys.databases')
+        with open(outfile, 'w') as f:
+            for row in results:
+               register(row.name, 'mssql4://BuildDbAdmin:Alt0ids76@localhost/' + row.name)
+            # print row.name
+            # f.write("%s\n" % str(row.name))
+            # register('ApplicationConfiguration', 'mssql4://BuildDbAdmin:Alt0ids76@localhost/ApplicationConfiguration')
+        return None
+
+    @staticmethod
     def getPrimaryKey(database, tablename):
         query = '''
             SELECT ac.name
