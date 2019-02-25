@@ -26,3 +26,5 @@ register('ApplicationConfiguration', 'mssql4://BuildDbAdmin:Alt0ids76@localhost/
 index()
 print(DBREG)
 
+
+
