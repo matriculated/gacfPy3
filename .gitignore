@@ -2,3 +2,5 @@ applications/ApplicationConfig/progress.log
 applications/admin/sessions/*
 httpserver.log
 httpserver.pid
+parameters_9999.py
+temp.list
