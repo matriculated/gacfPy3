@@ -98,21 +98,45 @@ auth.settings.create_user_groups=False
 auth.settings.remember_me_form = False
 
 from gluon.contrib.login_methods.ldap_auth import ldap_auth
-auth.settings.login_methods.append(ldap_auth(mode='ad',
-                                             server='qwdcnet001.QAnets.ISLLCQA.org',
-                                             base_dn='DC=qanets,DC=ISLLCQA,DC=org',
+auth.settings.login_methods.append(ldap_auth(server='192.168.33.253',
+                                             base_dn='ou=people,dc=example,dc=com',
                                              manage_user=True,
-                                             user_firstname_attrib='cn:1',
-                                             user_lastname_attrib='cn:2',
                                              user_mail_attrib='mail',
-                                             manage_groups=True,
-                                             db=db,
-                                             group_dn='DC=qanets,DC=ISLLCQA,DC=org',
-                                             group_name_attrib='cn',
-                                             group_member_attrib='member:1.2.840.113556.1.4.1941:',
-                                             group_filterstr='objectClass=group'
+                                             manage_groups=True
                                             )
                                   )
+
+# auth.settings.login_methods.append(ldap_auth(mode='ad',
+#                                              server='qwdcnet001.QAnets.ISLLCQA.org',
+#                                              base_dn='DC=qanets,DC=ISLLCQA,DC=org',
+#                                              manage_user=True,
+#                                              user_firstname_attrib='cn:1',
+#                                              user_lastname_attrib='cn:2',
+#                                              user_mail_attrib='mail',
+#                                              manage_groups=True,
+#                                              db=db,
+#                                              group_dn='DC=qanets,DC=ISLLCQA,DC=org',
+#                                              group_name_attrib='cn',
+#                                              group_member_attrib='member:1.2.840.113556.1.4.1941:',
+#                                              group_filterstr='objectClass=group'
+#                                             )
+#                                   )
+
+# auth.settings.login_methods.append(ldap_auth(mode='ad',
+#                                              server='qwdcnet001.QAnets.ISLLCQA.org',
+#                                              base_dn='DC=qanets,DC=ISLLCQA,DC=org',
+#                                              manage_user=True,
+#                                              user_firstname_attrib='cn:1',
+#                                              user_lastname_attrib='cn:2',
+#                                              user_mail_attrib='mail',
+#                                              manage_groups=True,
+#                                              db=db,
+#                                              group_dn='DC=qanets,DC=ISLLCQA,DC=org',
+#                                              group_name_attrib='cn',
+#                                              group_member_attrib='member:1.2.840.113556.1.4.1941:',
+#                                              group_filterstr='objectClass=group'
+#                                             )
+#                                   )
 
 # -------------------------------------------------------------------------
 # configure email
