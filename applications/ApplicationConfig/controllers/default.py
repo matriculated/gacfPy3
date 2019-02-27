@@ -5,19 +5,16 @@ import os.path
 from pydal import DAL, Field
 
 def index():
-    x=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.bak'
+    existingfile=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.bak'
     outfile=os.getcwd()+ '\\applications\\' +request.application+'\models\database_registry.py.out'
 
     db=DAL('mssql4://BuildDbAdmin:Alt0ids76@localhost/master')
     results=db.executesql('select * from sys.databases')
     with open(outfile, 'w') as f:
         for row in results:
-            # print row.name
             # f.write("%s\n" % str(row.name))
-            # register('ApplicationConfiguration', 'mssql4://BuildDbAdmin:Alt0ids76@localhost/ApplicationConfiguration')
             register(row.name, 'mssql4://BuildDbAdmin:Alt0ids76@localhost/' + row.name)
 
-    # return 'ZZZ \>' + x + str(os.path.isfile(x)) + '\\' + request.application + ' \< ZZZ'
     return DBREG
     # return dict()
 
