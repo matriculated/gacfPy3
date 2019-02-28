@@ -5,10 +5,14 @@ import schemaUtilities
 reload(schemaUtilities)
 
 
-
-
 def index():
     dbname = request.get_vars.get('dbname', None)
+
+    print("XXXXXZZZZZZZZZZZZZ")
+    print(dbname + " " + str(DBREG))
+    print("XXXXXZZZZZZZZZZZZZ")
+
+
     if not dbname in DBREG:
         redirect(URL(f='index'))
     database = DBREG[dbname]

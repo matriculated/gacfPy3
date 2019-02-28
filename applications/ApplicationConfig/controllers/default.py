@@ -15,6 +15,9 @@ def index():
             # f.write("%s\n" % str(row.name))
             register(row.name, 'mssql4://BuildDbAdmin:Alt0ids76@localhost/' + row.name)
 
+    print("XXXXXXXXXXXXXXXXXRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+    print(DBREG)
+    print("XXXXXXXXXXXXXXXXXRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
     return DBREG
     # return dict()
 
